@@ -1,0 +1,16 @@
+name: Hola Mundo
+on: [push]
+jobs:
+  hola-mundo:
+    runs-on: ubuntu-latest
+    steps:
+     - name : checkout
+       uses: actions/checkout@v3
+
+     - name: install node
+       uses: actions/setup-node@v6
+             
+     - name: run script
+       run: npx tsx hola-mundo.ts
+
+
