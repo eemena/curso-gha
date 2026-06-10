@@ -1,0 +1,37 @@
+name: Expresiones
+run-name: ¡Estoy aprendiendo a usar Expresiones!
+on:
+  workflow_dispatch:
+    inputs:
+      numero:
+        description: 'Numero entero'
+        required: true
+        type: number
+jobs:
+  parity:
+    runs-on: ubuntu-latest
+    outputs:
+      is_odd: ${{ steps.check.outputs.is_odd }}
+    steps:
+      - id: check
+        run: |
+          numero="${{ github.event.inputs.numero }}"
+          if (( numero % 2 != 0 )); then
+            echo "is_odd=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "is_odd=false" >> "$GITHUB_OUTPUT"
+          fi
+
+  impar:
+    needs: parity
+    if: ${{ needs.parity.outputs.is_odd == 'true' }}
+    runs-on: ubuntu-latest
+    steps:
+      - run: echo "Ingresó un número impar"
+
+  par:
+    needs: parity
+    if: ${{ needs.parity.outputs.is_odd == 'false' }}
+    runs-on: ubuntu-latest
+    steps:
+      - run: echo "Ingresó un número par"
